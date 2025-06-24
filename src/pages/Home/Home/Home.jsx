@@ -3,6 +3,7 @@ import Banner from '../Banner/Banner';
 import Services from '../Services/Services.jsx';
 import HowItWorks from '../HowItWorks/HowItWorks.jsx';
 import ClientCarousel from '../ClientCarousel/ClientCarousel.jsx';
+import DeliveryFeatures from '../DeliveryFeatures/DeliveryFeatures.jsx';
 
 const Home = () => {
     return (
@@ -11,6 +12,7 @@ const Home = () => {
             <HowItWorks></HowItWorks>
             <Services></Services>
             <ClientCarousel></ClientCarousel>
+            <DeliveryFeatures></DeliveryFeatures>
         </div>
     );
 };
