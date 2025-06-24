@@ -3,7 +3,7 @@ import ZapShiftLogo from "../ZapShiftLogo/ZapShiftLogo";
 
 const Footer = () => {
   return (
-    <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-content p-10">
+    <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-content p-10 font-bold my-6 rounded-2xl">
       <aside>
         <ZapShiftLogo></ZapShiftLogo>
         <p className="font-bold">
