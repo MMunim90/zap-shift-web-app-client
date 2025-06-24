@@ -3,15 +3,13 @@ import ZapShiftLogo from "../ZapShiftLogo/ZapShiftLogo";
 
 const Footer = () => {
   return (
-    <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-content p-10 font-bold my-6 rounded-2xl">
+    <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-content p-10 font-bold my-6 rounded-4xl">
       <aside>
         <ZapShiftLogo></ZapShiftLogo>
         <p className="font-bold">
-          ACME Industries Ltd.
-          <br />
-          Providing reliable tech since 1992
+          Enjoy fast, reliable parcel delivery with real-time tracking and zero hassle. From personal packages to <br /> business shipments — we deliver on time, every time.
         </p>
-        <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+        <div className="hidden md:block w-full py-3 border-y-2 border-dashed border-gray-300 my-6"><p>Copyright © {new Date().getFullYear()} - All right reserved</p></div>
       </aside>
       <nav>
         <div className="grid grid-flow-col gap-4">

@@ -4,6 +4,7 @@ import Services from '../Services/Services.jsx';
 import HowItWorks from '../HowItWorks/HowItWorks.jsx';
 import ClientCarousel from '../ClientCarousel/ClientCarousel.jsx';
 import DeliveryFeatures from '../DeliveryFeatures/DeliveryFeatures.jsx';
+import BeMerchant from '../BeMerchant/BeMerchant.jsx';
 
 const Home = () => {
     return (
@@ -13,6 +14,7 @@ const Home = () => {
             <Services></Services>
             <ClientCarousel></ClientCarousel>
             <DeliveryFeatures></DeliveryFeatures>
+            <BeMerchant></BeMerchant>
         </div>
     );
 };

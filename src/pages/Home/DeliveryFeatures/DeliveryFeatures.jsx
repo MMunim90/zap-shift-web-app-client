@@ -30,7 +30,7 @@ const features = [
 
 const DeliveryFeatures = () => {
   return (
-    <section className=" py-16 px-4 md:px-8 border-y-2 border-dashed border-gray-300">
+    <section className="py-16 px-4 md:px-8 border-y-2 border-dashed border-gray-300">
       <div className="max-w-6xl mx-auto">
         {features.map((feature, index) => (
           <div
