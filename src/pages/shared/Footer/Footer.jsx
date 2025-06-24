@@ -6,10 +6,10 @@ const Footer = () => {
     <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-content p-10 font-bold my-6 rounded-4xl">
       <aside>
         <ZapShiftLogo></ZapShiftLogo>
-        <p className="font-bold">
+        <p className="font-bold opacity-50 mt-6">
           Enjoy fast, reliable parcel delivery with real-time tracking and zero hassle. From personal packages to <br /> business shipments — we deliver on time, every time.
         </p>
-        <div className="hidden md:block w-full py-3 border-y-2 border-dashed border-gray-300 my-6"><p>Copyright © {new Date().getFullYear()} - All right reserved</p></div>
+        <div className="hidden md:block w-full py-3 border-y-2 border-dashed border-gray-200 my-4 opacity-50"><p>Copyright © {new Date().getFullYear()} - All right reserved</p></div>
       </aside>
       <nav>
         <div className="grid grid-flow-col gap-4">

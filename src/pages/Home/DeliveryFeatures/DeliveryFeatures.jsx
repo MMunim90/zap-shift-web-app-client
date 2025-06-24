@@ -50,7 +50,7 @@ const DeliveryFeatures = () => {
               <h3 className="text-lg md:text-xl font-semibold text-white mb-2">
                 {feature.title}
               </h3>
-              <p className="text-white text-sm md:text-base">
+              <p className="text-white text-sm md:text-base opacity-70">
                 {feature.description}
               </p>
             </div>

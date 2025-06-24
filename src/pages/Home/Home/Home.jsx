@@ -5,6 +5,7 @@ import HowItWorks from '../HowItWorks/HowItWorks.jsx';
 import ClientCarousel from '../ClientCarousel/ClientCarousel.jsx';
 import DeliveryFeatures from '../DeliveryFeatures/DeliveryFeatures.jsx';
 import BeMerchant from '../BeMerchant/BeMerchant.jsx';
+import Faq from '../FAQ/Faq.jsx';
 
 const Home = () => {
     return (
@@ -15,6 +16,7 @@ const Home = () => {
             <ClientCarousel></ClientCarousel>
             <DeliveryFeatures></DeliveryFeatures>
             <BeMerchant></BeMerchant>
+            <Faq></Faq>
         </div>
     );
 };
