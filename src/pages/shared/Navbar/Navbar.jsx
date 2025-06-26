@@ -1,12 +1,17 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import ZapShiftLogo from "../ZapShiftLogo/ZapShiftLogo";
+import { MdArrowOutward } from "react-icons/md";
 
 const Navbar = () => {
   const navItems = (
     <>
-      <li><NavLink to='/'>Home</NavLink></li>
-      <li><NavLink to='/about'>About Us</NavLink></li>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink to="/about">About Us</NavLink>
+      </li>
     </>
   );
   return (
@@ -37,15 +42,28 @@ const Navbar = () => {
             {navItems}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl"><ZapShiftLogo></ZapShiftLogo></a>
+        <a className="btn btn-ghost text-xl">
+          <ZapShiftLogo></ZapShiftLogo>
+        </a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navItems}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        <Link
+          to="/login"
+          className="btn btn-outline border-gray-300 hover:bg-[#CAEB66] text-black rounded-xl"
+        >
+          Sign In
+        </Link>
+        <div className="flex justify-center items-center ml-3">
+          <button className="btn text-black bg-[#CAEB66] rounded-xl font-bold border-none">
+            Be a rider
+          </button>
+          <button className="btn w-11 h-11 bg-black text-[#CAEB66] rounded-full font-bold">
+            <MdArrowOutward size={25} />
+          </button>
+        </div>
       </div>
     </div>
   );

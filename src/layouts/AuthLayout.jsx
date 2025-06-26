@@ -11,9 +11,9 @@ const AuthLayout = () => {
       </div>
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="flex-1">
-          <img src={authImg} className="max-w-sm" />
+          <img src={authImg} className="max-w-sm lg:max-w-lg" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex justify-center mt-6">
           <Outlet></Outlet>
         </div>
       </div>
