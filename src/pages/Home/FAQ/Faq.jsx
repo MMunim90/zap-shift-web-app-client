@@ -78,8 +78,8 @@ const Faq = () => {
 
       <div className="flex justify-center mt-8 items-center">
         <button className="btn text-black bg-[#CAEB66] rounded-xl font-bold">See More FAQ’s</button>
-        <button className="btn w-12 h-12 bg-black text-[#CAEB66] rounded-full font-bold">
-          <MdArrowOutward size={30}/>
+        <button className="w-11 h-11 bg-black text-[#CAEB66] rounded-full font-bold">
+          <MdArrowOutward className="mx-auto" size={30}/>
         </button>
       </div>
     </div>

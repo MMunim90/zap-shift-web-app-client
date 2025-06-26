@@ -1,9 +1,31 @@
-import React from "react";
+import React, { use } from "react";
 import { Link, NavLink } from "react-router";
 import ZapShiftLogo from "../ZapShiftLogo/ZapShiftLogo";
 import { MdArrowOutward } from "react-icons/md";
+import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { BiLogOut } from "react-icons/bi";
 
 const Navbar = () => {
+  const { user, logOut } = use(AuthContext);
+
+  const handleLogOut = () => {
+    // console.log("user trying to logout")
+    logOut()
+      .then(() => {
+        Swal.fire({
+          title: "Drag me!",
+          icon: "success",
+          confirmButtonColor: "#3085d6", 
+          draggable: true,
+        });
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
   const navItems = (
     <>
       <li>
@@ -12,10 +34,13 @@ const Navbar = () => {
       <li>
         <NavLink to="/about">About Us</NavLink>
       </li>
+      <li>
+        <NavLink to="/coverage">Coverage</NavLink>
+      </li>
     </>
   );
   return (
-    <div className="navbar shadow-sm bg-white text-black font-bold my-6 rounded-2xl">
+    <div className="navbar shadow-sm bg-white text-black font-bold my-6 rounded-2xl sticky top-0 z-10 border-2 border-[#CAEB66]">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -42,7 +67,7 @@ const Navbar = () => {
             {navItems}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">
+        <a className="btn bg-white border-none shadow-none text-black text-xl">
           <ZapShiftLogo></ZapShiftLogo>
         </a>
       </div>
@@ -50,20 +75,37 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
-        <Link
-          to="/login"
-          className="btn btn-outline border-gray-300 hover:bg-[#CAEB66] text-black rounded-xl"
-        >
-          Sign In
-        </Link>
-        <div className="flex justify-center items-center ml-3">
-          <button className="btn text-black bg-[#CAEB66] rounded-xl font-bold border-none">
-            Be a rider
+        {!user ? (
+          <div className="flex">
+            <Link
+              to="/login"
+              className="btn btn-outline border-gray-300 hover:bg-[#CAEB66] text-black rounded-xl"
+            >
+              Sign In
+            </Link>
+            <div className="hidden md:block flex justify-center items-center ml-3">
+              <button className="btn text-black bg-[#CAEB66] rounded-xl font-bold border-none">
+                Be a rider
+              </button>
+            </div>
+              <button className="hidden md:block w-10 h-10 bg-black text-[#CAEB66] rounded-full font-bold">
+                <MdArrowOutward className="mx-auto" size={25} />
+              </button>
+          </div>
+        ) : (
+          ""
+        )}
+        {user ? (
+          <button
+            onClick={handleLogOut}
+            className="btn border-none bg-[#CAEB66] text-black rounded-xl"
+          >
+            <BiLogOut />
+            Log out
           </button>
-          <button className="btn w-11 h-11 bg-black text-[#CAEB66] rounded-full font-bold">
-            <MdArrowOutward size={25} />
-          </button>
-        </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
