@@ -3,7 +3,7 @@ import image from '../../../assets/location-merchant.png'
 
 const BeMerchant = () => {
   return (
-    <div data-aos="flip-up" data-aos-duration="3000" className="bg-[#03373D] bg-[url('assets/be-a-merchant-bg.png')] bg-no-repeat rounded-4xl p-20">
+    <div data-aos="flip-up" data-aos-duration="2000" className="bg-[#03373D] bg-[url('assets/be-a-merchant-bg.png')] bg-no-repeat rounded-4xl p-20">
       <div className="hero-content flex-col lg:flex-row-reverse">
         <img
           src={image}
