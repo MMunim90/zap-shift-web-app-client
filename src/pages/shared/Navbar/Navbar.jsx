@@ -17,7 +17,7 @@ const Navbar = () => {
         Swal.fire({
           title: "Drag me!",
           icon: "success",
-          confirmButtonColor: "#3085d6", 
+          confirmButtonColor: "#CAEB66",
           draggable: true,
         });
       })
@@ -37,6 +37,11 @@ const Navbar = () => {
       <li>
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
+      {
+        user ? (<li>
+        <NavLink to="/sendParcel">Send Parcel</NavLink>
+      </li>) : ''
+      }
     </>
   );
   return (

@@ -58,7 +58,7 @@ const Register = () => {
             </p>
           )}
         </fieldset>
-        <button className="btn bg-[#CAEB66] text-black w-full md:w-4/5 lg:w-8/10 font-bold mt-4 mb-1">Register</button>
+        <button type="submit" className="btn bg-[#CAEB66] text-black w-[320px] font-bold mt-4 mb-1">Register</button>
         <p><small>Already have an account? <Link className="text-[#CAEB66] font-bold btn-link" to='/login'>Login</Link></small></p>
       </form>
       <SocialLogin></SocialLogin>

@@ -37,7 +37,7 @@ const Login = () => {
             <a className="link link-hover">Forgot password?</a>
           </div>
         </fieldset>
-          <button className="btn bg-[#CAEB66] text-black w-full md:w-4/5 lg:w-8/10 font-bold mt-4 mb-1">Login</button>
+          <button className="btn bg-[#CAEB66] text-black w-[320px] font-bold mt-4 mb-1">Login</button>
           <p><small>Don’t have any account? <Link className="text-[#CAEB66] font-bold btn-link" to='/register'>Register</Link></small></p>
       </form>
         <SocialLogin></SocialLogin>
