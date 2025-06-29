@@ -5,10 +5,12 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
 import { FaEye, FaTrash, FaMoneyCheckAlt } from "react-icons/fa";
+import { useNavigate } from "react-router";
 
 const MyParcels = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   const {
     data: parcels = [],
@@ -45,7 +47,7 @@ const MyParcels = () => {
   };
 
   const handlePay = (parcel) => {
-    window.location.href = `/payment/${parcel._id}`;
+    navigate(`/dashboard/payment/${parcel._id}`);
   };
 
   const handleDelete = (parcel) => {
