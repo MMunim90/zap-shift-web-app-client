@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const generateTrackingId = () => {
   const prefix = "PCL";
@@ -28,6 +29,7 @@ const SendParcel = () => {
   } = useForm();
 
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const senderRegion = watch("senderRegion");
   const receiverRegion = watch("receiverRegion");
@@ -160,34 +162,54 @@ const SendParcel = () => {
       status: "pending",
       tracking_id: generateTrackingId(),
       payment_status: "unpaid",
-      delivery_status: 'not_collected',
+      delivery_status: "not_collected",
       isPaid: false,
+      total_cost: cost,
     };
 
     console.log("Saving to DB:", savedData);
 
-    Swal.fire({
-      title: "🎉 Parcel Booked Successfully!",
-      html: `
-      <div class="text-left text-base leading-relaxed">
-        <p><strong>Parcel Title:</strong> ${savedData.title}</p>
-        <p><strong>Type:</strong> ${savedData.type}</p>
-        <p><strong>Email:</strong> ${savedData.email}</p>
-        <p><strong>Created On:</strong> ${dayjs(savedData.creation_date).format(
-          "YYYY-MM-DD HH:mm:ss"
-        )}</p>
-        <hr class="my-2"/>
-        <p class="text-lg font-semibold">
-          Total Delivery Cost: <span class="text-green-600 text-xl">৳${cost}</span>
-        </p>
-      </div>
-    `,
-      icon: "success",
-      confirmButtonText: "🎯 Done",
-      customClass: {
-        confirmButton:
-          "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded",
-      },
+    axiosSecure.post("/parcels", savedData).then((res) => {
+      console.log(res.data);
+      if (res.data.insertedId) {
+        Swal.fire({
+          title: "🎉 Parcel Booked Successfully!",
+          html: `
+        <div class="text-left text-base leading-relaxed">
+          <p><strong>Parcel Title:</strong> ${savedData.title}</p>
+          <p><strong>Type:</strong> ${savedData.type}</p>
+          <p><strong>Email:</strong> ${savedData.email}</p>
+          <p><strong>Created On:</strong> ${dayjs(
+            savedData.creation_date
+          ).format("YYYY-MM-DD HH:mm:ss")}</p>
+          <hr class="my-2"/>
+          <p class="text-lg font-semibold">
+            Total Delivery Cost: <span class="text-green-600 text-xl">৳${cost}</span>
+          </p>
+        </div>
+      `,
+          icon: "success",
+          showCancelButton: true,
+          confirmButtonText: "🎯 Done",
+          cancelButtonText: "💳 Go to Payment",
+          customClass: {
+            confirmButton:
+              "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded",
+            cancelButton:
+              "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2",
+          },
+        }).then((result) => {
+          if (result.isDismissed || result.isConfirmed) {
+            // "Done" or closed – do nothing
+            return;
+          }
+          if (result.dismiss === Swal.DismissReason.cancel) {
+            // "Go to Payment"
+            window.location.href = `/payment/${res.data.insertedId}`;
+            // or use navigate(`/payment/${res.data.insertedId}`) if using React Router
+          }
+        });
+      }
     });
   };
 
