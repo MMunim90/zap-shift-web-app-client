@@ -1,10 +1,14 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import Swal from "sweetalert2";
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const from = location.state?.from || "/";
   const {
     register,
     handleSubmit,
@@ -17,6 +21,13 @@ const Register = () => {
     createUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        Swal.fire({
+          title: "Registration Successful!",
+          icon: "success",
+          confirmButtonColor: "#CAEB66",
+          draggable: true,
+        });
+        navigate(from);
       })
       .catch((error) => {
         console.error(error);
@@ -58,8 +69,20 @@ const Register = () => {
             </p>
           )}
         </fieldset>
-        <button type="submit" className="btn bg-[#CAEB66] text-black w-[320px] font-bold mt-4 mb-1">Register</button>
-        <p><small>Already have an account? <Link className="text-[#CAEB66] font-bold btn-link" to='/login'>Login</Link></small></p>
+        <button
+          type="submit"
+          className="btn bg-[#CAEB66] text-black w-[320px] font-bold mt-4 mb-1"
+        >
+          Register
+        </button>
+        <p>
+          <small>
+            Already have an account?{" "}
+            <Link className="text-[#CAEB66] font-bold btn-link" to="/login">
+              Login
+            </Link>
+          </small>
+        </p>
       </form>
       <SocialLogin></SocialLogin>
     </div>

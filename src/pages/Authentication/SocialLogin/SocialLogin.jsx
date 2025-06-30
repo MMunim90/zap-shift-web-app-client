@@ -1,29 +1,38 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const SocialLogin = () => {
+  const { signInWithGoogle } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from || "/";
 
-    const {signInWithGoogle} = useAuth();
-    const location = useLocation();
-    const navigate = useNavigate();
-    const from = location.state?.from || '/';
-
-    const handleGoogleSignIn = () => {
-        signInWithGoogle()
-        .then(res => {
-            console.log(res.user)
-            navigate(from);
-        })
-        .catch(error => {
-            console.error(error);
-        })
-    }
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((res) => {
+        console.log(res.user);
+        Swal.fire({
+          title: "Login Successful!",
+          icon: "success",
+          confirmButtonColor: "#CAEB66",
+          draggable: true,
+        });
+        navigate(from);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div>
       <div className="text-center md:mr-18 my-2">OR</div>
-      <button onClick={handleGoogleSignIn} className="btn bg-white text-black w-[320px] font-bold mb-1">
+      <button
+        onClick={handleGoogleSignIn}
+        className="btn bg-white text-black w-[320px] font-bold mb-1"
+      >
         <svg
           aria-label="Google logo"
           width="16"

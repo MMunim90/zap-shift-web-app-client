@@ -15,7 +15,7 @@ const Navbar = () => {
     logOut()
       .then(() => {
         Swal.fire({
-          title: "Drag me!",
+          title: "Log Out Successfully!",
           icon: "success",
           confirmButtonColor: "#CAEB66",
           draggable: true,
