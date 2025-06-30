@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import Swal from "sweetalert2";
 import { FaEye, FaTrash, FaMoneyCheckAlt } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import Loading from "../../shared/Loading/Loading";
 
 const MyParcels = () => {
   const { user } = useAuth();
@@ -31,6 +32,7 @@ const MyParcels = () => {
       html: `
         <div class="text-left text-base leading-relaxed">
           <p><strong>Tracking ID:</strong> ${parcel.tracking_id}</p>
+          <p><strong>Parcel ID:</strong> ${parcel._id}</p>
           <p><strong>Type:</strong> ${parcel.type}</p>
           <p><strong>Weight:</strong> ${parcel.weight || "N/A"} kg</p>
           <p><strong>Status:</strong> ${parcel.status}</p>
@@ -43,6 +45,7 @@ const MyParcels = () => {
         </div>
       `,
       confirmButtonText: "Close",
+      confirmButtonColor: "#CAEB66",
     });
   };
 
@@ -57,6 +60,7 @@ const MyParcels = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "red",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/parcels/${parcel._id}`).then(() => {
@@ -69,14 +73,14 @@ const MyParcels = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">My Parcels</h2>
+      <h2 className="text-3xl font-bold mb-6">My Parcels</h2>
 
       {isLoading ? (
-        <p className="text-center">Loading...</p>
+        <p className="text-center"><Loading></Loading></p>
       ) : (
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">
-            <thead>
+            <thead className="bg-[#CAEB66] text-black">
               <tr className="text-base">
                 <th>#</th>
                 <th>Title</th>

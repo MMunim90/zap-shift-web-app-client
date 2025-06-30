@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
 
 const generateTrackingId = () => {
   const prefix = "PCL";
@@ -20,6 +21,7 @@ const SendParcel = () => {
   const [receiverAreas, setReceiverAreas] = useState([]);
   const [formData, setFormData] = useState(null);
   const [cost, setCost] = useState(0);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -139,11 +141,11 @@ const SendParcel = () => {
   `,
       icon: "info",
       showCancelButton: true,
+      confirmButtonColor: "#CAEB66",
       confirmButtonText: "✅ Proceed to Payment",
       cancelButtonText: "✏️ Edit Parcel Info",
       customClass: {
-        confirmButton:
-          "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded",
+        confirmButton: "text-black px-4 py-2 rounded",
         cancelButton:
           "bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded ml-2",
       },
@@ -190,23 +192,22 @@ const SendParcel = () => {
       `,
           icon: "success",
           showCancelButton: true,
+          confirmButtonColor: "#CAEB66",
           confirmButtonText: "🎯 Done",
           cancelButtonText: "💳 Go to Payment",
           customClass: {
-            confirmButton:
-              "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded",
+            confirmButton: "text-black px-4 py-2 rounded",
             cancelButton:
               "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2",
           },
         }).then((result) => {
-          if (result.isDismissed || result.isConfirmed) {
-            // "Done" or closed – do nothing
+          if (result.dismiss === Swal.DismissReason.cancel) {
+            navigate(`/dashboard/payment/${res.data.insertedId}`);
             return;
           }
-          if (result.dismiss === Swal.DismissReason.cancel) {
-            // "Go to Payment"
-            window.location.href = `/payment/${res.data.insertedId}`;
-            // or use navigate(`/payment/${res.data.insertedId}`) if using React Router
+
+          if (result.isDismissed || result.isConfirmed) {
+            return;
           }
         });
       }
@@ -270,12 +271,27 @@ const SendParcel = () => {
                   type="number"
                   step="0.1"
                   className="input input-bordered w-full"
-                  {...register("weight")}
+                  {...register("weight", {
+                    validate: (value) => {
+                      if (parcelType === "non-document") {
+                        if (!value)
+                          return "Weight is required for non-document parcels.";
+                        if (value > 100)
+                          return "Maximum allowed weight is 100 kg.";
+                      }
+                      return true;
+                    },
+                  })}
                   disabled={parcelType !== "non-document"}
                 />
                 {parcelType !== "non-document" && (
                   <p className="text-sm text-gray-500">
                     Weight only required for non-document parcels.
+                  </p>
+                )}
+                {errors.weight && (
+                  <p className="text-red-500 text-sm">
+                    {errors.weight.message}
                   </p>
                 )}
               </div>
@@ -302,9 +318,20 @@ const SendParcel = () => {
                 <input
                   type="number"
                   className="input input-bordered w-full"
-                  {...register("senderContact", { required: true })}
+                  {...register("senderContact", {
+                    required: "Contact number is required",
+                    validate: (value) =>
+                      /^\d{11}$/.test(value) ||
+                      "Contact number must be 11 digits",
+                  })}
                 />
+                {errors.senderContact && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.senderContact.message}
+                  </p>
+                )}
               </div>
+
               <div>
                 <label className="label">Region</label>
                 <select
@@ -362,14 +389,26 @@ const SendParcel = () => {
                   {...register("receiverName", { required: true })}
                 />
               </div>
+
               <div>
                 <label className="label">Contact</label>
                 <input
                   type="number"
                   className="input input-bordered w-full"
-                  {...register("receiverContact", { required: true })}
+                  {...register("receiverContact", {
+                    required: "Contact number is required",
+                    validate: (value) =>
+                      /^\d{11}$/.test(value) ||
+                      "Contact number must be 11 digits",
+                  })}
                 />
+                {errors.receiverContact && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.receiverContact.message}
+                  </p>
+                )}
               </div>
+
               <div>
                 <label className="label">Region</label>
                 <select
