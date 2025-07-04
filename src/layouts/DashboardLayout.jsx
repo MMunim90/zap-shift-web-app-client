@@ -52,14 +52,25 @@ const DashboardLayout = () => {
           {/* Sidebar content here */}
           <ZapShiftLogo></ZapShiftLogo>
           <li>
-            <NavLink to="/dashboard" className="flex items-center gap-2">
+            <NavLink
+              to="/dashboard/home"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
+            >
               <FaHome /> Home
             </NavLink>
           </li>
           <li>
             <NavLink
               to="/dashboard/profile"
-              className="flex items-center gap-2"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
             >
               <FaUserCircle /> Profile
             </NavLink>
@@ -67,7 +78,11 @@ const DashboardLayout = () => {
           <li>
             <NavLink
               to="/dashboard/myParcels"
-              className="flex items-center gap-2"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
             >
               <FaBoxOpen /> My Parcels
             </NavLink>
@@ -75,13 +90,24 @@ const DashboardLayout = () => {
           <li>
             <NavLink
               to="/dashboard/paymentHistory"
-              className="flex items-center gap-2"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
             >
               <FaHistory /> Payment History
             </NavLink>
           </li>
           <li>
-            <NavLink to="/dashboard/track" className="flex items-center gap-2">
+            <NavLink
+              to="/dashboard/track"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
+            >
               <FaSearchLocation /> Track a Parcel
             </NavLink>
           </li>

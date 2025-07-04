@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router";
+import { createBrowserRouter } from "react-router";
 import RootLayout from "../layouts/RootLayout";
 import Home from "../pages/Home/Home/Home";
 import AuthLayout from "../layouts/AuthLayout";
@@ -13,6 +13,7 @@ import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import TrackParcel from "../pages/Dashboard/TrackParcel/TrackParcel";
 import AboutUs from "../pages/AboutUs/AboutUs";
+import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -21,65 +22,77 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Home
+        Component: Home,
       },
       {
-        path: 'coverage',
+        path: "coverage",
         Component: Coverage,
-        loader: () => fetch('./warehouses.json')
+        loader: () => fetch("./warehouses.json"),
       },
       {
-        path: 'sendParcel',
-        element: <PrivateRoute>
-          <SendParcel></SendParcel>
-        </PrivateRoute>
+        path: "sendParcel",
+        element: (
+          <PrivateRoute>
+            <SendParcel></SendParcel>
+          </PrivateRoute>
+        ),
       },
       {
-        path: 'about',
+        path: "about",
         Component: AboutUs,
       },
-    ]
+    ],
   },
   {
-    path: '/',
+    path: "/",
     Component: AuthLayout,
     children: [
       {
-        path: 'login',
-        Component: Login
+        path: "login",
+        Component: Login,
       },
       {
-        path: 'register',
-        Component: Register
-      }
-    ]
+        path: "register",
+        Component: Register,
+      },
+    ],
   },
   {
-    path: '/dashboard',
-    element: <PrivateRoute>
-      <DashboardLayout></DashboardLayout>
-    </PrivateRoute>,
-    children:[
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
       {
-        path: 'myParcels',
-        Component: MyParcels
+        path: "home",
+        Component: DashboardHome,
       },
       {
-        path: 'profile',
-        Component: Payment
+        path: "myParcels",
+        Component: MyParcels,
       },
       {
-        path: 'payment/:parcelId',
-        Component: Payment
+        path: "profile",
+        Component: Payment,
       },
       {
-        path: 'paymentHistory',
-        Component: PaymentHistory
+        path: "payment/:parcelId",
+        Component: Payment,
       },
       {
-        path: 'track',
-        Component: TrackParcel
-      }
-    ]
-  }
+        path: "paymentHistory",
+        Component: PaymentHistory,
+      },
+      {
+        path: "track",
+        Component: TrackParcel,
+      },
+      {
+        path: "track/:trackingId",
+        Component: TrackParcel,
+      },
+    ],
+  },
 ]);

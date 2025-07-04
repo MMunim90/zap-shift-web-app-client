@@ -29,26 +29,72 @@ const Navbar = () => {
   const navItems = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "text-white bg-[#03373D] px-3 py-2 rounded"
+              : "px-3 py-2 rounded"
+          }
+        >
+          Home
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/about">About Us</NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            isActive
+              ? "text-white bg-[#03373D] px-3 py-2 rounded"
+              : "px-3 py-2 rounded"
+          }
+        >
+          About Us
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/coverage">Coverage</NavLink>
+        <NavLink
+          to="/coverage"
+          className={({ isActive }) =>
+            isActive
+              ? "text-white bg-[#03373D] px-3 py-2 rounded"
+              : "px-3 py-2 rounded"
+          }
+        >
+          Coverage
+        </NavLink>
       </li>
-      {
-        user && (<>
-        <li>
-        <NavLink to="/sendParcel">Send Parcel</NavLink>
-      </li>
-      <li>
-        <NavLink to="/dashboard">Dashboard</NavLink>
-      </li>
-        </>) 
-      }
+      {user && (
+        <>
+          <li>
+            <NavLink
+              to="/sendParcel"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-white bg-[#03373D] px-3 py-2 rounded"
+                  : "px-3 py-2 rounded"
+              }
+            >
+              Send Parcel
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-white bg-[#03373D] px-3 py-2 rounded"
+                  : "px-3 py-2 rounded"
+              }
+            >
+              Dashboard
+            </NavLink>
+          </li>
+        </>
+      )}
     </>
   );
+
   return (
     <div className="navbar shadow-sm bg-white text-black font-bold my-6 rounded-2xl sticky top-0 z-50 border-2 border-[#CAEB66]">
       <div className="navbar-start">
@@ -98,9 +144,9 @@ const Navbar = () => {
                 Be a rider
               </button>
             </div>
-              <button className="hidden md:block w-10 h-10 bg-black text-[#CAEB66] rounded-full font-bold">
-                <MdArrowOutward className="mx-auto" size={25} />
-              </button>
+            <button className="hidden md:block w-10 h-10 bg-black text-[#CAEB66] rounded-full font-bold">
+              <MdArrowOutward className="mx-auto" size={25} />
+            </button>
           </div>
         ) : (
           ""
