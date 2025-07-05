@@ -1,17 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Loading from "../../shared/Loading/Loading";
 
 const PendingRiders = () => {
-  const [pendingRiders, setPendingRiders] = useState([]);
   const [selectedRider, setSelectedRider] = useState(null);
   const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    axiosSecure.get("/riderApplications/pending")
-      .then(res => setPendingRiders(res.data))
-      .catch(err => console.error(err));
-  }, [axiosSecure]);
+  // Fetch pending riders using React Query
+  const { data: pendingRiders = [], isLoading, isError } = useQuery({
+    queryKey: ["pendingRiders"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/riderApplications/pending");
+      return res.data;
+    },
+  });
 
   const handleApprove = async (id) => {
     const confirm = await Swal.fire({
@@ -24,8 +29,8 @@ const PendingRiders = () => {
     if (confirm.isConfirmed) {
       try {
         await axiosSecure.patch(`/riderApplications/status/${id}`, { status: "approved" });
-        setPendingRiders(prev => prev.filter(r => r._id !== id));
         Swal.fire("Approved!", "Rider application has been approved.", "success");
+        queryClient.invalidateQueries({ queryKey: ["pendingRiders"] });
       } catch (error) {
         Swal.fire("Error", "Failed to approve rider.", error);
       }
@@ -44,13 +49,16 @@ const PendingRiders = () => {
     if (confirm.isConfirmed) {
       try {
         await axiosSecure.delete(`/riderApplications/${id}`);
-        setPendingRiders(prev => prev.filter(r => r._id !== id));
         Swal.fire("Rejected!", "Rider application has been rejected.", "success");
+        queryClient.invalidateQueries({ queryKey: ["pendingRiders"] });
       } catch (error) {
         Swal.fire("Error", "Failed to reject rider.", error);
       }
     }
   };
+
+  if (isLoading) return <Loading></Loading>;
+  if (isError) return <div className="p-4 text-red-500">Failed to load data</div>;
 
   return (
     <div className="p-4">
