@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import serviceCenters from "../../../public/warehouses.json";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import axios from "axios";
 
 const BeARider = () => {
   const { user } = useAuth();
@@ -25,51 +26,67 @@ const BeARider = () => {
     nidImage: "",
     bikeImage: "",
     additionalInfo: "",
-    status: "pending"
+    status: "pending",
   });
 
   useEffect(() => {
-    const regionList = [...new Set(serviceCenters.map(center => center.region))];
+    const regionList = [
+      ...new Set(serviceCenters.map((center) => center.region)),
+    ];
     setRegions(regionList);
   }, []);
 
   useEffect(() => {
     if (selectedRegion) {
       const filteredDistricts = serviceCenters
-        .filter(center => center.region === selectedRegion)
-        .map(center => center.district);
+        .filter((center) => center.region === selectedRegion)
+        .map((center) => center.district);
       setDistricts(filteredDistricts);
     } else {
       setDistricts([]);
     }
   }, [selectedRegion]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     if (name === "region") setSelectedRegion(value);
   };
 
-  const handleFileUpload = (e, type) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleImageUpload = async (e, field) => {
+    const image = e.target.files[0];
+    if (!image) return;
 
-    if (!file.type.startsWith("image/")) {
-      Swal.fire("Invalid File", "Please upload an image file.", "error");
-      return;
-    }
+    const formDataUpload = new FormData();
+    formDataUpload.append("image", image);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData(prev => ({
+    try {
+      Swal.fire({
+        title: "Uploading...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_upload_key
+      }`;
+      const res = await axios.post(imageUploadUrl, formDataUpload);
+
+      const url = res.data.data.url;
+
+      setFormData((prev) => ({
         ...prev,
-        [type]: reader.result
+        [field]: url,
       }));
-    };
-    reader.readAsDataURL(file);
+
+      Swal.close();
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Image upload failed.", "error");
+    }
   };
 
   const validateForm = () => {
@@ -87,13 +104,17 @@ const BeARider = () => {
       return false;
     }
     if (!nidImage || !bikeImage) {
-      Swal.fire("Missing Images", "Please upload both NID and bike images.", "warning");
+      Swal.fire(
+        "Missing Images",
+        "Please upload both NID and bike images.",
+        "warning"
+      );
       return false;
     }
     return true;
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
@@ -104,7 +125,7 @@ const BeARider = () => {
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, Submit",
-      cancelButtonText: "Cancel"
+      cancelButtonText: "Cancel",
     });
 
     if (!confirm.isConfirmed) return;
@@ -113,7 +134,7 @@ const BeARider = () => {
       await axiosSecure.post("/riderApplications", formData);
       Swal.fire("Success", "Your application has been submitted!", "success");
 
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         age: "",
         region: "",
@@ -124,7 +145,7 @@ const BeARider = () => {
         bikeRegNumber: "",
         nidImage: "",
         bikeImage: "",
-        additionalInfo: ""
+        additionalInfo: "",
       }));
       setSelectedRegion("");
     } catch (err) {
@@ -139,8 +160,18 @@ const BeARider = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name and Email */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" value={formData.name} readOnly className="input input-bordered w-full" />
-          <input type="email" value={formData.email} readOnly className="input input-bordered w-full" />
+          <input
+            type="text"
+            value={formData.name}
+            readOnly
+            className="input input-bordered w-full"
+          />
+          <input
+            type="email"
+            value={formData.email}
+            readOnly
+            className="input input-bordered w-full"
+          />
         </div>
 
         {/* Age */}
@@ -164,8 +195,10 @@ const BeARider = () => {
             required
           >
             <option value="">Select Region</option>
-            {regions.map(region => (
-              <option key={region} value={region}>{region}</option>
+            {regions.map((region) => (
+              <option key={region} value={region}>
+                {region}
+              </option>
             ))}
           </select>
 
@@ -178,8 +211,10 @@ const BeARider = () => {
             disabled={!districts.length}
           >
             <option value="">Select District</option>
-            {districts.map(district => (
-              <option key={district} value={district}>{district}</option>
+            {districts.map((district) => (
+              <option key={district} value={district}>
+                {district}
+              </option>
             ))}
           </select>
         </div>
@@ -206,20 +241,22 @@ const BeARider = () => {
           />
         </div>
 
-        {/* NID Image Upload */}
-        <div>
-          <label className="block mb-1 font-medium">Upload NID Card Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={e => handleFileUpload(e, "nidImage")}
-            className="file-input file-input-bordered w-full"
-            required
+        {/* NID Upload */}
+        <label className="block mb-1 font-medium">Upload NID Card Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImageUpload(e, "nidImage")}
+          className="file-input file-input-bordered w-full"
+          required
+        />
+        {formData.nidImage && (
+          <img
+            src={formData.nidImage}
+            alt="NID Preview"
+            className="mt-2 h-40 object-contain rounded border"
           />
-          {formData.nidImage && (
-            <img src={formData.nidImage} alt="NID Preview" className="mt-2 h-40 object-contain rounded border" />
-          )}
-        </div>
+        )}
 
         {/* Bike Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -243,20 +280,22 @@ const BeARider = () => {
           />
         </div>
 
-        {/* Bike Image Upload */}
-        <div>
-          <label className="block mb-1 font-medium">Upload Bike Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={e => handleFileUpload(e, "bikeImage")}
-            className="file-input file-input-bordered w-full"
-            required
+        {/* Bike Upload */}
+        <label className="block mt-4 mb-1 font-medium">Upload Bike Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImageUpload(e, "bikeImage")}
+          className="file-input file-input-bordered w-full"
+          required
+        />
+        {formData.bikeImage && (
+          <img
+            src={formData.bikeImage}
+            alt="Bike Preview"
+            className="mt-2 h-40 object-contain rounded border"
           />
-          {formData.bikeImage && (
-            <img src={formData.bikeImage} alt="Bike Preview" className="mt-2 h-40 object-contain rounded border" />
-          )}
-        </div>
+        )}
 
         {/* Additional Info */}
         <textarea

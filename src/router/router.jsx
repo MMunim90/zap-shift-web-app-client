@@ -15,6 +15,8 @@ import TrackParcel from "../pages/Dashboard/TrackParcel/TrackParcel";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import BeARider from "../pages/BeARider/BeARider";
+import PendingRiders from "../pages/Dashboard/PendingRiders/PendingRiders";
+import Profile from "../pages/Dashboard/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -82,7 +84,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile",
-        Component: Payment,
+        Component: Profile,
       },
       {
         path: "payment/:parcelId",
@@ -99,6 +101,10 @@ export const router = createBrowserRouter([
       {
         path: "track/:trackingId",
         Component: TrackParcel,
+      },
+      {
+        path: "pendingRiders",
+        Component: PendingRiders,
       },
     ],
   },

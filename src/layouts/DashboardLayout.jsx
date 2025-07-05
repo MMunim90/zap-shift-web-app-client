@@ -7,6 +7,8 @@ import {
   FaBoxOpen,
   FaHistory,
   FaSearchLocation,
+  FaMotorcycle,
+  FaClock,
 } from "react-icons/fa";
 
 const DashboardLayout = () => {
@@ -109,6 +111,32 @@ const DashboardLayout = () => {
               }
             >
               <FaSearchLocation /> Track a Parcel
+            </NavLink>
+          </li>
+
+          {/* riders link */}
+          <li>
+            <NavLink
+              to="/dashboard/activeRiders"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
+            >
+              <FaMotorcycle /> Active Riders
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/dashboard/pendingRiders"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
+            >
+              <FaClock /> Pending Riders
             </NavLink>
           </li>
         </ul>
