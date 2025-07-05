@@ -14,6 +14,7 @@ import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import TrackParcel from "../pages/Dashboard/TrackParcel/TrackParcel";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
+import BeARider from "../pages/BeARider/BeARider";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,12 @@ export const router = createBrowserRouter([
       {
         path: "about",
         Component: AboutUs,
+      },
+      {
+        path: "beARider",
+        element: <PrivateRoute>
+          <BeARider></BeARider>
+        </PrivateRoute>
       },
     ],
   },

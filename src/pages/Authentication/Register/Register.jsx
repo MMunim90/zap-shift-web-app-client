@@ -86,9 +86,10 @@ const Register = () => {
           <label className="label">Profile Photo</label>
           <input
             type="file"
+            accept="image/*"
             onChange={handleImageUpload}
-            className="input"
-            placeholder="Profile Photo"
+            className="file-input file-input-bordered w-[320px]"
+            required
           />
 
           {/* name  */}

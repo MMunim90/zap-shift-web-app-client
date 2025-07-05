@@ -123,42 +123,45 @@ const Navbar = () => {
             {navItems}
           </ul>
         </div>
-        <a className="btn bg-white border-none shadow-none text-black text-xl">
+        <span className="btn bg-white border-none shadow-none text-black text-xl">
           <ZapShiftLogo></ZapShiftLogo>
-        </a>
+        </span>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
         {!user ? (
-          <div className="flex">
             <Link
               to="/login"
               className="btn btn-outline border-gray-300 hover:bg-[#CAEB66] text-black rounded-xl"
             >
               Sign In
             </Link>
-            <div className="hidden md:block flex justify-center items-center ml-3">
-              <button className="btn text-black bg-[#CAEB66] rounded-xl font-bold border-none">
-                Be a rider
-              </button>
-            </div>
-            <button className="hidden md:block w-10 h-10 bg-black text-[#CAEB66] rounded-full font-bold">
-              <MdArrowOutward className="mx-auto" size={25} />
-            </button>
-          </div>
         ) : (
           ""
         )}
         {user ? (
-          <button
-            onClick={handleLogOut}
-            className="btn border-none bg-[#CAEB66] text-black rounded-xl"
-          >
-            <BiLogOut />
-            Log out
-          </button>
+          <div className="flex">
+            <div className="flex">
+              <div className="hidden md:block justify-center items-center">
+                <Link to='/beARider' className="btn text-black bg-[#CAEB66] rounded-xl font-bold border-none">
+                  Be a rider
+                </Link>
+              </div>
+              <button className="hidden md:block w-10 h-10 bg-black text-[#CAEB66] rounded-full font-bold mr-3">
+                <MdArrowOutward className="mx-auto" size={25} />
+              </button>
+            </div>
+
+            <button
+              onClick={handleLogOut}
+              className="btn border-none bg-[#CAEB66] text-black rounded-xl"
+            >
+              <BiLogOut />
+              Log out
+            </button>
+          </div>
         ) : (
           ""
         )}

@@ -23,7 +23,7 @@ const BeMerchant = () => {
               Become a Merchant
             </button>
             <button className="btn btn-outline rounded-full text-[#CAEB66]">
-              Earn with Profast Courier
+              Earn with Zap Courier
             </button>
           </div>
         </div>

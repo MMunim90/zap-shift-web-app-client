@@ -1,0 +1,281 @@
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import serviceCenters from "../../../public/warehouses.json";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+
+const BeARider = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
+  const [regions, setRegions] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState("");
+
+  const [formData, setFormData] = useState({
+    name: user?.displayName || "",
+    email: user?.email || "",
+    age: "",
+    region: "",
+    district: "",
+    phone: "",
+    nid: "",
+    bikeBrand: "",
+    bikeRegNumber: "",
+    nidImage: "",
+    bikeImage: "",
+    additionalInfo: "",
+    status: "pending"
+  });
+
+  useEffect(() => {
+    const regionList = [...new Set(serviceCenters.map(center => center.region))];
+    setRegions(regionList);
+  }, []);
+
+  useEffect(() => {
+    if (selectedRegion) {
+      const filteredDistricts = serviceCenters
+        .filter(center => center.region === selectedRegion)
+        .map(center => center.district);
+      setDistricts(filteredDistricts);
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedRegion]);
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    if (name === "region") setSelectedRegion(value);
+  };
+
+  const handleFileUpload = (e, type) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      Swal.fire("Invalid File", "Please upload an image file.", "error");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData(prev => ({
+        ...prev,
+        [type]: reader.result
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const validateForm = () => {
+    const { age, phone, nid, nidImage, bikeImage } = formData;
+    if (!age || age < 18) {
+      Swal.fire("Invalid Age", "You must be at least 18 years old.", "warning");
+      return false;
+    }
+    if (!/^\d{11}$/.test(phone)) {
+      Swal.fire("Invalid Phone", "Phone number must be 11 digits.", "warning");
+      return false;
+    }
+    if (!/^\d{10,17}$/.test(nid)) {
+      Swal.fire("Invalid NID", "NID must be 10 to 17 digits.", "warning");
+      return false;
+    }
+    if (!nidImage || !bikeImage) {
+      Swal.fire("Missing Images", "Please upload both NID and bike images.", "warning");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    const confirm = await Swal.fire({
+      title: "Confirm Submission",
+      text: "Do you want to submit this application?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Submit",
+      cancelButtonText: "Cancel"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      await axiosSecure.post("/riderApplications", formData);
+      Swal.fire("Success", "Your application has been submitted!", "success");
+
+      setFormData(prev => ({
+        ...prev,
+        age: "",
+        region: "",
+        district: "",
+        phone: "",
+        nid: "",
+        bikeBrand: "",
+        bikeRegNumber: "",
+        nidImage: "",
+        bikeImage: "",
+        additionalInfo: ""
+      }));
+      setSelectedRegion("");
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Submission failed. Please try again.", "error");
+    }
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-10">
+      <h2 className="text-3xl font-bold mb-6">Be a Rider Application</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Name and Email */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" value={formData.name} readOnly className="input input-bordered w-full" />
+          <input type="email" value={formData.email} readOnly className="input input-bordered w-full" />
+        </div>
+
+        {/* Age */}
+        <input
+          type="number"
+          name="age"
+          placeholder="Your Age"
+          value={formData.age}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+          required
+        />
+
+        {/* Region and District */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <select
+            name="region"
+            value={formData.region}
+            onChange={handleChange}
+            className="select select-bordered w-full"
+            required
+          >
+            <option value="">Select Region</option>
+            {regions.map(region => (
+              <option key={region} value={region}>{region}</option>
+            ))}
+          </select>
+
+          <select
+            name="district"
+            value={formData.district}
+            onChange={handleChange}
+            className="select select-bordered w-full"
+            required
+            disabled={!districts.length}
+          >
+            <option value="">Select District</option>
+            {districts.map(district => (
+              <option key={district} value={district}>{district}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Phone and NID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="number"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+          <input
+            type="number"
+            name="nid"
+            placeholder="NID Card Number"
+            value={formData.nid}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+
+        {/* NID Image Upload */}
+        <div>
+          <label className="block mb-1 font-medium">Upload NID Card Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => handleFileUpload(e, "nidImage")}
+            className="file-input file-input-bordered w-full"
+            required
+          />
+          {formData.nidImage && (
+            <img src={formData.nidImage} alt="NID Preview" className="mt-2 h-40 object-contain rounded border" />
+          )}
+        </div>
+
+        {/* Bike Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            name="bikeBrand"
+            placeholder="Bike Brand"
+            value={formData.bikeBrand}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+          <input
+            type="text"
+            name="bikeRegNumber"
+            placeholder="Bike Registration Number"
+            value={formData.bikeRegNumber}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+
+        {/* Bike Image Upload */}
+        <div>
+          <label className="block mb-1 font-medium">Upload Bike Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => handleFileUpload(e, "bikeImage")}
+            className="file-input file-input-bordered w-full"
+            required
+          />
+          {formData.bikeImage && (
+            <img src={formData.bikeImage} alt="Bike Preview" className="mt-2 h-40 object-contain rounded border" />
+          )}
+        </div>
+
+        {/* Additional Info */}
+        <textarea
+          name="additionalInfo"
+          placeholder="Additional Information (optional)"
+          value={formData.additionalInfo}
+          onChange={handleChange}
+          className="textarea textarea-bordered w-full"
+        />
+
+        {/* Hidden Status */}
+        <input type="hidden" name="status" value="pending" />
+
+        <button type="submit" className="btn bg-[#CAEB66] text-black w-full">
+          Submit Application
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default BeARider;
