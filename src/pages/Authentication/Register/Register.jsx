@@ -9,7 +9,7 @@ import useAxios from "../../../hooks/useAxios";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [profilePic, setProfilePic] = useState('');
+  const [profilePic, setProfilePic] = useState("");
   const axiosInstance = useAxios();
 
   const from = location.state?.from || "/";
@@ -23,32 +23,32 @@ const Register = () => {
   const onSubmit = (data) => {
     console.log(data);
     createUser(data.email, data.password)
-      .then(async(result) => {
+      .then(async (result) => {
         console.log(result.user);
 
         //update userinfo in the database
         const userInfo = {
           email: data.email,
-          role: 'user', // default role
+          role: "user", // default role
           created_at: new Date().toISOString(),
-          last_logged_in: new Date().toISOString()
-        }
+          last_logged_in: new Date().toISOString(),
+        };
 
-        const userRes = await axiosInstance.post('/users', userInfo);
+        const userRes = await axiosInstance.post("/users", userInfo);
         console.log(userRes.data);
 
         // update user profile in firebase
         const userProfile = {
-          displayName : data.name,
-          photoURL : profilePic
-        }
+          displayName: data.name,
+          photoURL: profilePic,
+        };
         updateUserProfile(userProfile)
-        .then(() => {
-          console.log('profile name pic updated')
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(() => {
+            console.log("profile name pic updated");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
         Swal.fire({
           title: "Registration Successful!",
@@ -63,16 +63,18 @@ const Register = () => {
       });
   };
 
-  const handleImageUpload = async(e) => {
+  const handleImageUpload = async (e) => {
     const image = e.target.files[0];
-    console.log(image)
+    console.log(image);
     const formData = new FormData();
-    formData.append('image', image);
+    formData.append("image", image);
 
-    const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`
+    const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${
+      import.meta.env.VITE_image_upload_key
+    }`;
     const res = await axios.post(imageUploadUrl, formData);
-    setProfilePic(res.data.data.url)
-  }
+    setProfilePic(res.data.data.url);
+  };
   return (
     <div>
       <div className="text-center lg:text-left">

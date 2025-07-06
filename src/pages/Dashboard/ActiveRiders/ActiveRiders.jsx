@@ -71,6 +71,7 @@ const ActiveRiders = () => {
                 <th>Region</th>
                 <th>District</th>
                 <th>Bike</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -85,10 +86,11 @@ const ActiveRiders = () => {
                     <td>{rider.region}</td>
                     <td>{rider.district}</td>
                     <td>{rider.bikeBrand}</td>
+                    <td><button className="badge badge-success">{rider.status='Active'}</button></td>
                     <td>
                       <button
                         onClick={() => handleDeactivate(rider._id)}
-                        className="btn btn-xs btn-warning"
+                        className="badge badge-warning cursor-pointer"
                       >
                         Deactivate
                       </button>
