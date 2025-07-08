@@ -76,7 +76,7 @@ const MyParcels = () => {
       <h2 className="text-3xl font-bold mb-6">My Parcels</h2>
 
       {isLoading ? (
-        <p className="text-center"><Loading></Loading></p>
+        <div className="text-center"><Loading></Loading></div>
       ) : (
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">

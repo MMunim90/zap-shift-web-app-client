@@ -11,8 +11,11 @@ import {
   FaClock,
 } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
+import useUserRole from "../hooks/useUserRole";
 
 const DashboardLayout = () => {
+  const { role, loading } = useUserRole();
+  console.log(role);
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -116,42 +119,46 @@ const DashboardLayout = () => {
           </li>
 
           {/* riders link */}
-          <li>
-            <NavLink
-              to="/dashboard/activeRiders"
-              className={({ isActive }) =>
-                `flex items-center gap-2 px-3 py-2 rounded ${
-                  isActive ? "bg-[#CAEB66] text-black" : ""
-                }`
-              }
-            >
-              <FaMotorcycle /> Active Riders
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/dashboard/pendingRiders"
-              className={({ isActive }) =>
-                `flex items-center gap-2 px-3 py-2 rounded ${
-                  isActive ? "bg-[#CAEB66] text-black" : ""
-                }`
-              }
-            >
-              <FaClock /> Pending Riders
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/dashboard/manageAdmin"
-              className={({ isActive }) =>
-                `flex items-center gap-2 px-3 py-2 rounded ${
-                  isActive ? "bg-[#CAEB66] text-black" : ""
-                }`
-              }
-            >
-              <RiAdminFill /> Manage Admin
-            </NavLink>
-          </li>
+          { !loading && role === 'admin' &&
+            <>
+              <li>
+                <NavLink
+                  to="/dashboard/activeRiders"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded ${
+                      isActive ? "bg-[#CAEB66] text-black" : ""
+                    }`
+                  }
+                >
+                  <FaMotorcycle /> Active Riders
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/pendingRiders"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded ${
+                      isActive ? "bg-[#CAEB66] text-black" : ""
+                    }`
+                  }
+                >
+                  <FaClock /> Pending Riders
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/manageAdmin"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded ${
+                      isActive ? "bg-[#CAEB66] text-black" : ""
+                    }`
+                  }
+                >
+                  <RiAdminFill /> Manage Admin
+                </NavLink>
+              </li>
+            </>
+          }
         </ul>
       </div>
     </div>

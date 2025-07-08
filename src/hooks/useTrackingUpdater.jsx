@@ -2,7 +2,7 @@ import { useState } from "react";
 import useAxiosSecure from "./useAxiosSecure";
 
 const useTrackingUpdater = () => {
-  const [axiosSecure] = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
