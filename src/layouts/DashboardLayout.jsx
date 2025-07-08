@@ -10,6 +10,7 @@ import {
   FaMotorcycle,
   FaClock,
 } from "react-icons/fa";
+import { RiAdminFill } from "react-icons/ri";
 
 const DashboardLayout = () => {
   return (
@@ -137,6 +138,18 @@ const DashboardLayout = () => {
               }
             >
               <FaClock /> Pending Riders
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/dashboard/manageAdmin"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded ${
+                  isActive ? "bg-[#CAEB66] text-black" : ""
+                }`
+              }
+            >
+              <RiAdminFill /> Manage Admin
             </NavLink>
           </li>
         </ul>

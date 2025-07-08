@@ -18,6 +18,7 @@ import BeARider from "../pages/BeARider/BeARider";
 import PendingRiders from "../pages/Dashboard/PendingRiders/PendingRiders";
 import Profile from "../pages/Dashboard/Profile/Profile";
 import ActiveRiders from "../pages/Dashboard/ActiveRiders/ActiveRiders";
+import ManageAdmins from "../pages/Dashboard/MakeAdmin/ManageAdmins";
 
 export const router = createBrowserRouter([
   {
@@ -110,6 +111,10 @@ export const router = createBrowserRouter([
       {
         path: "activeRiders",
         Component: ActiveRiders,
+      },
+      {
+        path: "manageAdmin",
+        Component: ManageAdmins,
       },
     ],
   },

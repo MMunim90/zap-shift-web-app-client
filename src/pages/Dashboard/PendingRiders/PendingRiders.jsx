@@ -18,7 +18,7 @@ const PendingRiders = () => {
     },
   });
 
-  const handleApprove = async (id) => {
+  const handleApprove = async (id, email) => {
     const confirm = await Swal.fire({
       title: "Approve Rider?",
       icon: "question",
@@ -28,7 +28,7 @@ const PendingRiders = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axiosSecure.patch(`/riderApplications/status/${id}`, { status: "approved" });
+        await axiosSecure.patch(`/riderApplications/status/${id}`, { status: "approved", email });
         Swal.fire("Approved!", "Rider application has been approved.", "success");
         queryClient.invalidateQueries({ queryKey: ["pendingRiders"] });
       } catch (error) {
@@ -94,7 +94,7 @@ const PendingRiders = () => {
                   </button>
                   <button
                     className="btn btn-xs btn-success"
-                    onClick={() => handleApprove(rider._id)}
+                    onClick={() => handleApprove(rider._id, rider.email)}
                   >
                     Approve
                   </button>
