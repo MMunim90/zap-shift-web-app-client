@@ -22,6 +22,7 @@ import ManageAdmins from "../pages/Dashboard/MakeAdmin/ManageAdmins";
 import Forbidden from "../pages/Forbidden/Forbidden";
 import AdminRoute from "../routes/AdminRoute";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import AssignRider from "../pages/Dashboard/AssignRider/AssignRider";
 
 export const router = createBrowserRouter([
   {
@@ -116,12 +117,24 @@ export const router = createBrowserRouter([
         Component: TrackParcel,
       },
       {
+        path: "assignRider",
+        element: <AdminRoute>
+          <AssignRider></AssignRider>
+        </AdminRoute>
+
+      },
+      {
         path: "pendingRiders",
-        Component: PendingRiders,
+        element: <AdminRoute>
+          <PendingRiders></PendingRiders>
+        </AdminRoute>
+
       },
       {
         path: "activeRiders",
-        Component: ActiveRiders,
+        element: <AdminRoute>
+          <ActiveRiders></ActiveRiders>
+        </AdminRoute>
       },
       {
         path: "manageAdmin",

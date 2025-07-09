@@ -82,7 +82,7 @@ const ManageAdmins = () => {
                 <tr key={user._id}>
                   <td>{user.email}</td>
                   <td>
-                    {dayjs(user.creation_date).format("YYYY-MM-DD HH:mm")}
+                    {dayjs(user.creation_date).format("DD-MM-YYYY")}
                   </td>
                   <td>
                     <span

@@ -100,7 +100,7 @@ const MyParcels = () => {
                     {parcel.type === "document" ? "Document" : "Non-Document"}
                   </td>
                   <td>
-                    {dayjs(parcel.creation_date).format("YYYY-MM-DD HH:mm")}
+                    {dayjs(parcel.creation_date).format("DD-MM-YYYY")}
                   </td>
                   <td>
                     <span

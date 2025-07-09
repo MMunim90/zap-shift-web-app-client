@@ -59,7 +59,7 @@ const TrackParcel = () => {
         </button>
       </form>
 
-      {isLoading && <p className="text-blue-500"><Loading></Loading></p>}
+      {isLoading && <div className="text-blue-500"><Loading></Loading></div>}
       {error && <p className="text-red-500">No tracking information found.</p>}
 
       {trackingData.length > 0 && (
@@ -73,7 +73,7 @@ const TrackParcel = () => {
                 <div className="timeline-end">
                   <p>{update.status}</p>
                   <p className="text-xs text-gray-500">
-                    {dayjs(update.creation_date).format("YYYY-MM-DD HH:mm")}
+                    {dayjs(update.creation_date).format("DD-MM-YYYY")}
                   </p>
                 </div>
               </li>

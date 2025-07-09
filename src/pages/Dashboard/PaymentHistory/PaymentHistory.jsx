@@ -52,7 +52,7 @@ const PaymentHistory = () => {
                   <td>৳{payment.amount}</td>
                   <td className="capitalize">{payment.paymentMethod}</td>
                   <td>
-                    {dayjs(payment.paid_at).format("YYYY-MM-DD HH:mm:ss")}
+                    {dayjs(payment.creation_date).format("DD-MM-YYYY")}
                   </td>
                   <td className="text-xs text-[#CAEB66]">{payment.parcelId}</td>
                 </tr>

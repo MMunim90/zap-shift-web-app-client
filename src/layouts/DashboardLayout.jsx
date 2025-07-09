@@ -9,6 +9,7 @@ import {
   FaSearchLocation,
   FaMotorcycle,
   FaClock,
+  FaUserCheck,
 } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
 import useUserRole from "../hooks/useUserRole";
@@ -119,7 +120,7 @@ const DashboardLayout = () => {
           </li>
 
           {/* riders link */}
-          { !loading && role === 'admin' &&
+          {!loading && role === "admin" && (
             <>
               <li>
                 <NavLink
@@ -133,6 +134,19 @@ const DashboardLayout = () => {
                   <FaMotorcycle /> Active Riders
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/dashboard/assignRider"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded ${
+                      isActive ? "bg-[#CAEB66] text-black" : ""
+                    }`
+                  }
+                >
+                  <FaUserCheck /> Assign Rider
+                </NavLink>
+              </li>
+
               <li>
                 <NavLink
                   to="/dashboard/pendingRiders"
@@ -158,7 +172,7 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
             </>
-          }
+          )}
         </ul>
       </div>
     </div>
