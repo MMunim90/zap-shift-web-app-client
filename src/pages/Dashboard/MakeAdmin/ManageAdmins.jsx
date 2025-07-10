@@ -44,7 +44,7 @@ const ManageAdmins = () => {
           prev.map((u) => (u._id === id ? { ...u, role: newRole } : u))
         );
       } catch (error) {
-        Swal.fire("Error", "Failed to update role", error);
+        Swal.fire("Error", error?.response?.data?.message || "Failed to update role", "error");
       }
     }
   };

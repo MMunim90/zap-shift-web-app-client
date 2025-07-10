@@ -10,7 +10,7 @@ const BeARider = () => {
   const axiosSecure = useAxiosSecure();
 
   const [regions, setRegions] = useState([]);
-  const [districts, setDistricts] = useState([]);
+  const [coveredAreas, setCoveredAreas] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
 
   const [formData, setFormData] = useState({
@@ -38,12 +38,14 @@ const BeARider = () => {
 
   useEffect(() => {
     if (selectedRegion) {
-      const filteredDistricts = serviceCenters
+      // Find all covered areas for the selected region
+      const areas = serviceCenters
         .filter((center) => center.region === selectedRegion)
-        .map((center) => center.district);
-      setDistricts(filteredDistricts);
+        .flatMap((center) => center.covered_area);
+
+      setCoveredAreas(areas);
     } else {
-      setDistricts([]);
+      setCoveredAreas([]);
     }
   }, [selectedRegion]);
 
@@ -208,12 +210,12 @@ const BeARider = () => {
             onChange={handleChange}
             className="select select-bordered w-full"
             required
-            disabled={!districts.length}
+            disabled={!coveredAreas.length}
           >
-            <option value="">Select District</option>
-            {districts.map((district) => (
-              <option key={district} value={district}>
-                {district}
+            <option value="">Select Covered Area</option>
+            {coveredAreas.map((area) => (
+              <option key={area} value={area}>
+                {area}
               </option>
             ))}
           </select>

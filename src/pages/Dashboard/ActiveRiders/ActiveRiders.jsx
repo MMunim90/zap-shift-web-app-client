@@ -69,7 +69,7 @@ const ActiveRiders = () => {
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Region</th>
-                <th>District</th>
+                <th>Area</th>
                 <th>Bike</th>
                 <th>Status</th>
                 <th>Actions</th>

@@ -72,7 +72,7 @@ const PendingRiders = () => {
               <th>Email</th>
               <th>Phone</th>
               <th>Region</th>
-              <th>District</th>
+              <th>Area</th>
               <th>Actions</th>
             </tr>
           </thead>
