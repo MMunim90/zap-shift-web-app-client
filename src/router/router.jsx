@@ -23,6 +23,9 @@ import Forbidden from "../pages/Forbidden/Forbidden";
 import AdminRoute from "../routes/AdminRoute";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import AssignRider from "../pages/Dashboard/AssignRider/AssignRider";
+import PendingDeliveries from "../pages/Dashboard/PendingDeliveries/PendingDeliveries";
+import RiderRoute from "../routes/RiderRoute";
+import CompletedDeliveries from "../pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
 
 export const router = createBrowserRouter([
   {
@@ -116,6 +119,8 @@ export const router = createBrowserRouter([
         path: "track/:trackingId",
         Component: TrackParcel,
       },
+
+      // admin only route
       {
         path: "assignRider",
         element: <AdminRoute>
@@ -141,6 +146,22 @@ export const router = createBrowserRouter([
         element: <AdminRoute>
           <ManageAdmins></ManageAdmins>
         </AdminRoute>
+      },
+
+      //rider only route
+      {
+        path: "pendingDeliveries",
+        element: 
+        <RiderRoute>
+          <PendingDeliveries></PendingDeliveries>
+        </RiderRoute>
+      },
+      {
+        path: "completedDeliveries",
+        element: 
+        <RiderRoute>
+          <CompletedDeliveries></CompletedDeliveries>
+        </RiderRoute>
       },
     ],
   },

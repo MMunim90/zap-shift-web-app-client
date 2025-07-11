@@ -108,6 +108,13 @@ const PendingRiders = () => {
               </tr>
             ))}
           </tbody>
+          {pendingRiders.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="text-center text-gray-500 py-4">
+                    No Rider found.
+                  </td>
+                </tr>
+              )}
         </table>
       </div>
 

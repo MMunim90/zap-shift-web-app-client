@@ -121,21 +121,36 @@ const BeARider = () => {
 
     if (!validateForm()) return;
 
-    const confirm = await Swal.fire({
-      title: "Confirm Submission",
-      text: "Do you want to submit this application?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Submit",
-      cancelButtonText: "Cancel",
-    });
-
-    if (!confirm.isConfirmed) return;
-
     try {
+      // Step 1: Check if the user already applied
+      const { data } = await axiosSecure.get(
+        `/riderApplications/${formData.email}`
+      );
+      if (data.exists) {
+        return Swal.fire(
+          "Already Applied",
+          "You have already submitted a rider application.",
+          "warning"
+        );
+      }
+
+      // Step 2: Ask for confirmation
+      const confirm = await Swal.fire({
+        title: "Confirm Submission",
+        text: "Do you want to submit this application?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Submit",
+        cancelButtonText: "Cancel",
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      // Step 3: Submit the form
       await axiosSecure.post("/riderApplications", formData);
       Swal.fire("Success", "Your application has been submitted!", "success");
 
+      // Step 4: Reset form
       setFormData((prev) => ({
         ...prev,
         age: "",

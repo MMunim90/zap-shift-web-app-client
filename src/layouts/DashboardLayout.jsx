@@ -10,6 +10,8 @@ import {
   FaMotorcycle,
   FaClock,
   FaUserCheck,
+  FaTruckMoving,
+  FaCheckCircle,
 } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
 import useUserRole from "../hooks/useUserRole";
@@ -119,7 +121,7 @@ const DashboardLayout = () => {
             </NavLink>
           </li>
 
-          {/* riders link */}
+          {/* admin link */}
           {!loading && role === "admin" && (
             <>
               <li>
@@ -169,6 +171,37 @@ const DashboardLayout = () => {
                   }
                 >
                   <RiAdminFill /> Manage Admin
+                </NavLink>
+              </li>
+            </>
+          )}
+
+          {/* riders link */}
+          {!loading && role === "rider" && (
+            <>
+              <li>
+                <NavLink
+                  to="/dashboard/pendingDeliveries"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded ${
+                      isActive ? "bg-[#CAEB66] text-black" : ""
+                    }`
+                  }
+                >
+                  <FaTruckMoving /> Pending Deliveries
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/completedDeliveries"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded ${
+                      isActive ? "bg-[#CAEB66] text-black" : ""
+                    }`
+                  }
+                >
+                  <FaCheckCircle /> Completed Deliveries
                 </NavLink>
               </li>
             </>
