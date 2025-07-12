@@ -3,6 +3,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
+import Loading from "../../shared/Loading/Loading";
 
 const PendingDeliveries = () => {
   const axiosSecure = useAxiosSecure();
@@ -30,7 +31,7 @@ const PendingDeliveries = () => {
     }
   };
 
-  if (isLoading) return <p>Loading parcels...</p>;
+  if (isLoading) return <div><Loading></Loading></div>;
   if (isError) return <p className="text-red-500">Failed to load parcels</p>;
 
   return (

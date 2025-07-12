@@ -88,6 +88,7 @@ const MyParcels = () => {
                 <th>Created At</th>
                 <th>Payment</th>
                 <th>Total Cost</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -114,6 +115,7 @@ const MyParcels = () => {
                     </span>
                   </td>
                   <td>৳{parcel.total_cost || 0}</td>
+                  <td><div className="w-20">{parcel.delivery_status.replace('_', ' ')}</div></td>
                   <td>
                     <div className="flex gap-2">
                       <button
