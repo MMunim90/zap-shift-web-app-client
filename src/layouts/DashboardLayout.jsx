@@ -12,6 +12,7 @@ import {
   FaUserCheck,
   FaTruckMoving,
   FaCheckCircle,
+  FaMoneyBillWave,
 } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
 import useUserRole from "../hooks/useUserRole";
@@ -202,6 +203,19 @@ const DashboardLayout = () => {
                   }
                 >
                   <FaCheckCircle /> Completed Deliveries
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/myEarnings"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded ${
+                      isActive ? "bg-[#CAEB66] text-black" : ""
+                    }`
+                  }
+                >
+                  <FaMoneyBillWave /> My Earnings
                 </NavLink>
               </li>
             </>

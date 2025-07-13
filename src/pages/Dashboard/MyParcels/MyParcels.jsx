@@ -35,7 +35,7 @@ const MyParcels = () => {
           <p><strong>Parcel ID:</strong> ${parcel._id}</p>
           <p><strong>Type:</strong> ${parcel.type}</p>
           <p><strong>Weight:</strong> ${parcel.weight || "N/A"} kg</p>
-          <p><strong>Status:</strong> ${parcel.status}</p>
+          <p><strong>Status:</strong> ${parcel.delivery_status.replace('_', ' ')}</p>
           <p><strong>Payment Status:</strong> ${parcel.payment_status}</p>
           <p><strong>Created At:</strong> ${dayjs(parcel.creation_date).format(
             "YYYY-MM-DD HH:mm"

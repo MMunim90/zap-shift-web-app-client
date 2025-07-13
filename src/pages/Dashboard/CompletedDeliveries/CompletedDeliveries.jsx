@@ -3,12 +3,18 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import dayjs from "dayjs";
 import Loading from "../../shared/Loading/Loading";
+import Swal from "sweetalert2";
 
 const CompletedDeliveries = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
-  const { data: parcels = [], isLoading, isError } = useQuery({
+  const {
+    data: parcels = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ["completedDeliveries", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get("/rider/completed-deliveries");
@@ -26,13 +32,40 @@ const CompletedDeliveries = () => {
     }
   };
 
-  if (isLoading) return <div><Loading></Loading></div>;
+  if (isLoading)
+    return (
+      <div>
+        <Loading></Loading>
+      </div>
+    );
   if (isError) return <p className="text-red-500">Failed to load deliveries</p>;
 
   const totalEarnings = parcels.reduce(
     (sum, parcel) => sum + parseFloat(calculateEarnings(parcel)),
     0
   );
+
+  const handleCashout = async (parcelId) => {
+  const confirm = await Swal.fire({
+    title: "Cash Out?",
+    text: "Do you want to cash out this delivery fee?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  try {
+    await axiosSecure.patch(`/rider/cashout/${parcelId}`);
+    Swal.fire("Success", "Delivery fee cashed out!", "success");
+    refetch();
+  } catch (err) {
+    console.error(err);
+    Swal.fire("Error", "Cashout failed", "error");
+  }
+};
+
 
   return (
     <div className="p-4">
@@ -59,6 +92,7 @@ const CompletedDeliveries = () => {
                   <th>Delivered At</th>
                   <th>Status</th>
                   <th>Earnings</th>
+                  <th>Cashout</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,6 +123,18 @@ const CompletedDeliveries = () => {
                       </span>
                     </td>
                     <td>৳{calculateEarnings(parcel)}</td>
+                    <td>
+                      {parcel.isCashedOut ? (
+                        <span className="badge badge-success w-26">Cashed Out</span>
+                      ) : (
+                        <button
+                          className="btn btn-sm bg-yellow-500 text-black w-20 rounded-xl"
+                          onClick={() => handleCashout(parcel._id)}
+                        >
+                          Cash Out
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
