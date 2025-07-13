@@ -3,10 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Loading from "../../shared/Loading/Loading";
+import useUserRole from "../../../hooks/useUserRole";
 
 const DashboardHome = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const { role } = useUserRole();
 
   const { data: dashboardStats = {}, isLoading } = useQuery({
     queryKey: ["dashboardStats", user?.email],
@@ -42,7 +44,7 @@ const DashboardHome = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-semibold mb-6">Welcome back, {user?.displayName || "Rider"} 👋</h2>
+      <h2 className="text-2xl font-semibold mb-6">Welcome Back {role === 'user' ? user?.displayName : role} 👋</h2>
 
       {isLoading ? (
         <div><Loading></Loading></div>

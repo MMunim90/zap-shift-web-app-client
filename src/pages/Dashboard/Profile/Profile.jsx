@@ -4,10 +4,12 @@ import Swal from "sweetalert2";
 import { Fade } from "react-awesome-reveal";
 import { keyframes } from "@emotion/react";
 import useAuth from "../../../hooks/useAuth";
+import useUserRole from "../../../hooks/useUserRole";
 
 const Profile = () => {
   const { user, setUser, updateUserProfile } = useAuth();
   console.log(user)
+  const { role } = useUserRole();
 
   const handleUpdateUser = (e) => {
     e.preventDefault();
@@ -51,6 +53,7 @@ const Profile = () => {
       <div className="w-11/12 mx-auto mt-20 grid grid-cols-1 items-center">
         <Fade direction="down" keyframes={slightFadeDown}>
           <div className="flex flex-col items-center gap-8 md:mb-10">
+           <p className="font-bold text-5xl">{role} profile</p>
             <img className="w-92 h-92 rounded-full object-cover border-5 border-[#CAEB66]" src={user.photoURL} alt="" />
             <h1 className="font-bold text-3xl">
               Name : {user && user.displayName}
