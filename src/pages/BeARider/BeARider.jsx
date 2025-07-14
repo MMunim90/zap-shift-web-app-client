@@ -97,8 +97,8 @@ const BeARider = () => {
       Swal.fire("Invalid Age", "You must be at least 18 years old.", "warning");
       return false;
     }
-    if (!/^\d{11}$/.test(phone)) {
-      Swal.fire("Invalid Phone", "Phone number must be 11 digits.", "warning");
+    if (!/^(?:\+880|880|0)1[3-9]\d{8}$/.test(phone)) {
+      Swal.fire("Invalid Phone", "Contact number is not valid", "warning");
       return false;
     }
     if (!/^\d{10,17}$/.test(nid)) {

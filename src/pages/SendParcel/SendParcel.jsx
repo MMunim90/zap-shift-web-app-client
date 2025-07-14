@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate } from "react-router";
+import useTrackingUpdater from "../../hooks/useTrackingUpdater";
 
 const generateTrackingId = () => {
   const prefix = "PCL";
@@ -22,6 +23,7 @@ const SendParcel = () => {
   const [formData, setFormData] = useState(null);
   const [cost, setCost] = useState(0);
   const navigate = useNavigate();
+  const {updateTracking} = useTrackingUpdater();
 
   const {
     register,
@@ -61,7 +63,7 @@ const SendParcel = () => {
 
   const onSubmit = (data) => {
     const weight = parseFloat(data.weight) || 0;
-    const sameArea = data.senderArea === data.receiverArea;
+    const sameRegion = data.senderRegion === data.receiverRegion;
 
     let baseCost = 0;
     let extraCost = 0;
@@ -69,27 +71,27 @@ const SendParcel = () => {
     let breakdown = "";
 
     if (data.type === "document") {
-      baseCost = sameArea ? 60 : 80;
+      baseCost = sameRegion ? 60 : 80;
       breakdown = `Base Cost (Document): ৳${baseCost}`;
       total = baseCost;
     } else {
       if (weight <= 3) {
-        baseCost = sameArea ? 110 : 150;
+        baseCost = sameRegion ? 110 : 150;
         breakdown = `Base Cost (Non-Doc ≤ 3kg): ৳${baseCost}`;
         total = baseCost;
       } else {
         const extraKg = weight - 3;
-        extraCost = extraKg * 40;
-        baseCost = sameArea ? 110 : 150;
-        const extraOutside = sameArea ? 0 : 40;
+        extraCost = extraKg * 10;
+        baseCost = sameRegion ? 100 : 150;
+        const extraOutside = sameRegion ? 0 : 10;
         breakdown = `
         Base Cost (Non-Doc > 3kg): ৳${baseCost}<br/>
-        Extra Weight Charge (৳40/kg × ${extraKg.toFixed(
+        Extra Weight Charge (৳10/kg × ${extraKg.toFixed(
           1
         )}kg): ৳${extraCost}<br/>
-        ${!sameArea ? "Outside District Extra: ৳40<br/>" : ""}
+        ${!sameRegion ? "Outside District Extra: ৳50<br/>" : ""}
       `;
-        total = baseCost + extraCost + (sameArea ? 0 : 40);
+        total = baseCost + extraCost + (sameRegion ? 0 : 200);
       }
     }
 
@@ -111,7 +113,7 @@ const SendParcel = () => {
           : ""
       }
       <p><strong>Delivery:</strong> ${
-        sameArea ? "Within Same District" : "Outside District"
+        sameRegion ? "Within Same Region" : "Outside Region"
       }</p>
       <hr class="my-2"/>
       <p><strong>Base Charge:</strong> ৳${baseCost}</p>
@@ -119,17 +121,17 @@ const SendParcel = () => {
         data.type === "non-document" && weight > 3
           ? `
             <p><strong>Extra Weight Charge:</strong> ৳${extraCost}</p>
-            <p class="text-sm text-gray-500 ml-1">৳40 × ${(weight - 3).toFixed(
+            <p class="text-sm text-gray-500 ml-1">৳10 × ${(weight - 3).toFixed(
               1
             )}kg for weight over 3kg</p>
           `
           : ""
       }
       ${
-        data.type === "non-document" && weight > 3 && !sameArea
+        data.type === "non-document" && weight > 3 && !sameRegion
           ? `
-            <p><strong>Outside District Extra:</strong> ৳40</p>
-            <p class="text-sm text-gray-500 ml-1">Extra charge applies when destination is outside sender's district</p>
+            <p><strong>Outside Region Extra:</strong> ৳200</p>
+            <p class="text-sm text-gray-500 ml-1">Extra charge applies when destination is outside sender's Region</p>
           `
           : ""
       }
@@ -157,12 +159,13 @@ const SendParcel = () => {
   };
 
   const handleConfirm = () => {
+    const tracking_id = generateTrackingId();
     const savedData = {
       ...formData,
       email: user?.email || "unknown",
       creation_date: dayjs().toISOString(), // ISO 8601 format
       status: "pending",
-      tracking_id: generateTrackingId(),
+      tracking_id: tracking_id,
       payment_status: "unpaid",
       delivery_status: "not_collected",
       isPaid: false,
@@ -171,7 +174,7 @@ const SendParcel = () => {
 
     console.log("Saving to DB:", savedData);
 
-    axiosSecure.post("/parcels", savedData).then((res) => {
+    axiosSecure.post("/parcels", savedData).then(async (res) => {
       console.log(res.data);
       if (res.data.insertedId) {
         Swal.fire({
@@ -211,6 +214,14 @@ const SendParcel = () => {
           }
         });
       }
+
+      await updateTracking({
+        tracking_id: savedData.tracking_id,
+        status: "parcel_created",
+        details: `Created by ${user.displayName}`,
+        location: savedData.senderArea,
+        updated_by: user.email,
+      });
     });
   };
 
@@ -321,8 +332,8 @@ const SendParcel = () => {
                   {...register("senderContact", {
                     required: "Contact number is required",
                     validate: (value) =>
-                      /^\d{11}$/.test(value) ||
-                      "Contact number must be 11 digits",
+                      /^(?:\+880|880|0)1[3-9]\d{8}$/.test(value) ||
+                      "Contact number is not valid",
                   })}
                 />
                 {errors.senderContact && (
@@ -398,8 +409,8 @@ const SendParcel = () => {
                   {...register("receiverContact", {
                     required: "Contact number is required",
                     validate: (value) =>
-                      /^\d{11}$/.test(value) ||
-                      "Contact number must be 11 digits",
+                      /^(?:\+880|880|0)1[3-9]\d{8}$/.test(value) ||
+                      "Contact number is not valid",
                   })}
                 />
                 {errors.receiverContact && (

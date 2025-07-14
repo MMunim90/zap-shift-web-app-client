@@ -6,6 +6,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Loading from "../../shared/Loading/Loading";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useTrackingUpdater from "../../../hooks/useTrackingUpdater";
 
 const PaymentForm = () => {
   const stripe = useStripe();
@@ -15,6 +16,7 @@ const PaymentForm = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const {updateTracking} = useTrackingUpdater();
 
   const { isPending, data: parcelInfo = {} } = useQuery({
     queryKey: ["parcels", parcelId],
@@ -106,6 +108,14 @@ const PaymentForm = () => {
         }
       }
     }
+
+    await updateTracking({
+        tracking_id: parcelInfo.tracking_id,
+        status: "payment_done",
+        details: `Paid by ${user.displayName}`,
+        location: parcelInfo.senderArea,
+        updated_by: user.email,
+      });
   };
 
   return (

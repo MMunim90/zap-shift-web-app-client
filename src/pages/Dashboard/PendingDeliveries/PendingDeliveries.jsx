@@ -4,12 +4,19 @@ import useAuth from "../../../hooks/useAuth";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
 import Loading from "../../shared/Loading/Loading";
+import useTrackingUpdater from "../../../hooks/useTrackingUpdater";
 
 const PendingDeliveries = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const { updateTracking } = useTrackingUpdater();
 
-  const { data: parcels = [], refetch, isLoading, isError } = useQuery({
+  const {
+    data: parcels = [],
+    refetch,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["pendingDeliveries", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get("/rider/pending-deliveries");
@@ -18,12 +25,32 @@ const PendingDeliveries = () => {
     enabled: !!user?.email,
   });
 
-  const handleUpdateStatus = async (parcelId, newStatus) => {
+  const handleUpdateStatus = async (parcel, newStatus) => {
     try {
-      await axiosSecure.patch(`/parcels/${parcelId}/update-status`, {
+      // 1. Update parcel status
+      await axiosSecure.patch(`/parcels/${parcel._id}/update-status`, {
         delivery_status: newStatus,
       });
-      Swal.fire("Success", `Parcel marked as ${newStatus.replace("_", " ")}`, "success");
+
+      // 2. Add tracking entry
+      await updateTracking({
+        tracking_id: parcel.tracking_id,
+        status: newStatus,
+        details:
+          newStatus === "in_transit"
+            ? `Picked up by ${user.displayName}`
+            : `Delivered by ${user.displayName}`,
+        location:
+          newStatus === "in_transit" ? parcel.senderArea : parcel.receiverArea,
+        updated_by: user.email,
+      });
+
+      // 3. Feedback and refresh
+      Swal.fire(
+        "Success",
+        `Parcel marked as ${newStatus.replace("_", " ")}`,
+        "success"
+      );
       refetch();
     } catch (err) {
       console.error(err);
@@ -31,7 +58,12 @@ const PendingDeliveries = () => {
     }
   };
 
-  if (isLoading) return <div><Loading></Loading></div>;
+  if (isLoading)
+    return (
+      <div>
+        <Loading></Loading>
+      </div>
+    );
   if (isError) return <p className="text-red-500">Failed to load parcels</p>;
 
   return (
@@ -60,26 +92,32 @@ const PendingDeliveries = () => {
                 <tr key={parcel._id}>
                   <td>{parcel.tracking_id}</td>
                   <td>{parcel.title}</td>
-                  <td>{parcel.senderName} ({parcel.senderArea})</td>
-                  <td>{parcel.receiverName} ({parcel.receiverArea})</td>
+                  <td>
+                    {parcel.senderName} ({parcel.senderArea})
+                  </td>
+                  <td>
+                    {parcel.receiverName} ({parcel.receiverArea})
+                  </td>
                   <td>৳{parcel.total_cost}</td>
                   <td>
-                    <span className="badge badge-warning">{parcel.delivery_status}</span>
+                    <span className="badge badge-warning w-28">
+                      {parcel.delivery_status.replace("_", " ")}
+                    </span>
                   </td>
                   <td>{dayjs(parcel.creation_date).format("DD-MM-YYYY")}</td>
                   <td className="space-x-2">
                     {parcel.delivery_status === "rider_assigned" && (
                       <button
                         className="btn btn-xs bg-blue-500 text-white w-26 py-4 rounded-xl"
-                        onClick={() => handleUpdateStatus(parcel._id, "in_transit")}
+                        onClick={() => handleUpdateStatus(parcel, "in_transit")}
                       >
-                        Mark as Picked
+                        Mark Picked Up
                       </button>
                     )}
                     {parcel.delivery_status === "in_transit" && (
                       <button
                         className="btn btn-xs bg-green-600 text-white w-28 py-4 rounded-xl"
-                        onClick={() => handleUpdateStatus(parcel._id, "delivered")}
+                        onClick={() => handleUpdateStatus(parcel, "delivered")}
                       >
                         Mark as Delivered
                       </button>

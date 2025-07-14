@@ -4,11 +4,15 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import dayjs from "dayjs";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import useTrackingUpdater from "../../../hooks/useTrackingUpdater";
+import useAuth from "../../../hooks/useAuth";
 
 const AssignRider = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const { updateTracking } = useTrackingUpdater();
+  const { user } = useAuth();
 
   const {
     data: parcels = [],
@@ -179,6 +183,16 @@ const AssignRider = () => {
                                 "Rider assigned and parcel in transit",
                                 "success"
                               );
+
+                              // track rider assigned
+                              await updateTracking({
+                                tracking_id: selectedParcel.tracking_id,
+                                status: "rider_assigned",
+                                details: `Assigned to ${rider.name}`,
+                                location: selectedParcel.senderArea,
+                                updated_by: user.email,
+                              });
+
                               closeModal();
                             } catch (error) {
                               console.error("Assignment failed", error);
