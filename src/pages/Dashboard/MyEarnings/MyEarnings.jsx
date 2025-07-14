@@ -37,9 +37,7 @@ const MyEarnings = () => {
 
   const isCompleted = (p) =>
     ["delivered", "service_center_delivered"].includes(p.delivery_status);
-
   const isCashedOut = (p) => p.isCashedOut === true;
-
 
   const totalEarnings = sumByFilter(isCompleted);
   const totalCashedOut = sumByFilter((p) => isCompleted(p) && isCashedOut(p));
@@ -60,8 +58,7 @@ const MyEarnings = () => {
 
   const fmt = (v) => `৳${v.toFixed(2)}`;
 
-
-  if (isLoading) return <div><Loading></Loading></div>;
+  if (isLoading) return <div><Loading /></div>;
   if (isError) return <p className="text-red-500">Failed to load data</p>;
 
   return (
@@ -90,16 +87,22 @@ const MyEarnings = () => {
   );
 };
 
-/* Re‑usable small card components */
+// ✅ Color map for fixed Tailwind classes
+const bgMap = {
+  green: "bg-green-50 border-green-100",
+  blue: "bg-blue-50 border-blue-100",
+  yellow: "bg-yellow-50 border-yellow-100",
+};
+
+// ✅ Card with light background
 const Card = ({ title, value, color }) => (
-  <div
-    className={`p-4 rounded-lg shadow bg-${color}-100 border border-${color}-200`}
-  >
+  <div className={`p-4 rounded-lg shadow border ${bgMap[color] || "bg-gray-50 border-gray-200"}`}>
     <p className="text-sm text-gray-600">{title}</p>
     <p className="text-xl font-bold">{value}</p>
   </div>
 );
 
+// ✅ Mini card for breakdown section
 const Mini = ({ title, value }) => (
   <div className="p-3 bg-gray-100 rounded text-center">
     <p className="text-xs text-gray-500">{title}</p>
