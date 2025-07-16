@@ -68,7 +68,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-6">Admin Dashboard</h2>
+      <h2 className="text-2xl font-semibold mb-6">Parcel Delivery Summary</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-black">
         {statusCounts.map(({ status, count }) => {
@@ -93,8 +93,9 @@ const AdminDashboard = () => {
         })}
       </div>
 
+    <h1 className="text-2xl font-semibold mt-10">Delivery Status Breakdown</h1>
       {statusCounts.length > 0 && (
-        <div className="mt-8 w-full h-80">
+        <div className="mt-2 w-full h-80">
           <ResponsiveContainer>
             <PieChart>
               <Pie
