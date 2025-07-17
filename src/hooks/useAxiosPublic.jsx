@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosPublic = axios.create({
-  baseURL: "http://localhost:5000", // replace with your deployed URL if needed
+  baseURL: "https://zap-shift-server-mu.vercel.app", // replace with your deployed URL if needed
 });
 
 const useAxiosPublic = () => {

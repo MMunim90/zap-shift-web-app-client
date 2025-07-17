@@ -8,7 +8,7 @@ import useUserRole from "../../../hooks/useUserRole";
 
 const Profile = () => {
   const { user, setUser, updateUserProfile } = useAuth();
-  console.log(user)
+  //console.log(user)
   const { role } = useUserRole();
 
   const handleUpdateUser = (e) => {

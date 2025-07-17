@@ -20,7 +20,7 @@ const Login = () => {
   const onSubmit = (data) => {
     signIn(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
+        //console.log(result.user);
         Swal.fire({
           title: "Login Successful!",
           icon: "success",

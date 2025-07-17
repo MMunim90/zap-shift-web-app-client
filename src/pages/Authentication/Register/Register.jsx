@@ -21,10 +21,10 @@ const Register = () => {
   const { createUser, updateUserProfile } = useAuth();
 
   const onSubmit = (data) => {
-    console.log(data);
+    //console.log(data);
     createUser(data.email, data.password)
       .then(async (result) => {
-        console.log(result.user);
+        //console.log(result.user);
 
         //update userinfo in the database
         const userInfo = {
@@ -35,7 +35,7 @@ const Register = () => {
         };
 
         const userRes = await axiosInstance.post("/users", userInfo);
-        console.log(userRes.data);
+        //console.log(userRes.data);
 
         // update user profile in firebase
         const userProfile = {
@@ -44,10 +44,10 @@ const Register = () => {
         };
         updateUserProfile(userProfile)
           .then(() => {
-            console.log("profile name pic updated");
+            //console.log("profile name pic updated");
           })
           .catch((error) => {
-            console.log(error);
+            //console.log(error);
           });
 
         Swal.fire({
@@ -65,7 +65,7 @@ const Register = () => {
 
   const handleImageUpload = async (e) => {
     const image = e.target.files[0];
-    console.log(image);
+    //console.log(image);
     const formData = new FormData();
     formData.append("image", image);
 

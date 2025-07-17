@@ -172,10 +172,10 @@ const SendParcel = () => {
       total_cost: cost,
     };
 
-    console.log("Saving to DB:", savedData);
+    //console.log("Saving to DB:", savedData);
 
     axiosSecure.post("/parcels", savedData).then(async (res) => {
-      console.log(res.data);
+      //console.log(res.data);
       if (res.data.insertedId) {
         Swal.fire({
           title: "🎉 Parcel Booked Successfully!",

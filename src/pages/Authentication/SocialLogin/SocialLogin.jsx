@@ -15,7 +15,7 @@ const SocialLogin = () => {
     signInWithGoogle()
       .then(async(res) => {
         const user = res.user;
-        console.log(res.user);
+        //console.log(res.user);
         Swal.fire({
           title: "Login Successful!",
           icon: "success",
@@ -32,7 +32,7 @@ const SocialLogin = () => {
         };
 
         const result = await axiosInstance.post('/users', userInfo);
-        console.log('user update info', result.data);
+        //console.log('user update info', result.data);
 
         navigate(from);
       })

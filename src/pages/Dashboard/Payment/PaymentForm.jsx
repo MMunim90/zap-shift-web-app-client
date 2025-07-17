@@ -30,10 +30,10 @@ const PaymentForm = () => {
     return <Loading></Loading>;
   }
 
-  console.log(parcelInfo);
+  //console.log(parcelInfo);
   const amount = parcelInfo.total_cost;
   const amountInCents = amount * 100;
-  console.log(amountInCents);
+  //console.log(amountInCents);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,7 +55,7 @@ const PaymentForm = () => {
       setError(error.message);
     } else {
       setError("");
-      console.log("payment method", paymentMethod);
+      //console.log("payment method", paymentMethod);
 
       // step-2: create payment intent
       const res = await axiosSecure.post("/create-payment-intent", {
@@ -81,7 +81,7 @@ const PaymentForm = () => {
         setError("");
         if (result.paymentIntent.status === "succeeded") {
           // console.log("Payment succeeded!");
-          console.log(result);
+          //console.log(result);
 
           // mark parcel paid also create payment history
           const paymentData = {
